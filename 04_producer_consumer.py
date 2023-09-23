@@ -1,12 +1,14 @@
 import multiprocessing
 import time
 
+
 def producer(queue):
     for i in range(5):
         time.sleep(1)  # Simulate some work
         item = f"Item {i}"
         queue.put(item)
         print(f"Produced: {item}")
+
 
 def consumer(queue):
     while True:
@@ -15,6 +17,7 @@ def consumer(queue):
             break
         time.sleep(0.5)  # Simulate some work
         print(f"Consumed: {item}")
+
 
 if __name__ == "__main__":
     queue = multiprocessing.Queue()

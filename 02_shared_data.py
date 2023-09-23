@@ -1,9 +1,11 @@
 import multiprocessing
 
+
 def increment_shared_counter(counter, lock):
     for _ in range(100000):
         with lock:
             counter.value += 1
+
 
 if __name__ == "__main__":
     counter = multiprocessing.Value("i", 0)

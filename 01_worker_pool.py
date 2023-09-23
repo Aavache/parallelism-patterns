@@ -1,5 +1,5 @@
 import multiprocessing
-import time
+
 
 def worker(task_queue, result_queue):
     while True:
@@ -8,6 +8,7 @@ def worker(task_queue, result_queue):
             break
         result = task * 2  # Example task processing
         result_queue.put(result)
+
 
 if __name__ == "__main__":
     num_workers = 4

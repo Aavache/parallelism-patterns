@@ -1,9 +1,11 @@
 import multiprocessing
 
+
 def stage1(input_data, output_queue):
     for item in input_data:
         processed_item = item * 2
         output_queue.put(processed_item)
+
 
 def stage2(input_queue, output_queue):
     while True:
@@ -12,6 +14,7 @@ def stage2(input_queue, output_queue):
             break
         processed_item = item + 10
         output_queue.put(processed_item)
+
 
 if __name__ == "__main__":
     input_data = [1, 2, 3, 4, 5]

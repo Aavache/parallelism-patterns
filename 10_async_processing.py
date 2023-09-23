@@ -1,13 +1,17 @@
 import asyncio
 import concurrent.futures
 
+
 def square(x):
     return x * x
 
+
 async def async_square(x):
     loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(None, square, x)
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        result = await loop.run_in_executor(executor, square, x)
     return result
+
 
 async def main():
     data = [1, 2, 3, 4, 5]
@@ -15,6 +19,7 @@ async def main():
 
     results = await asyncio.gather(*tasks)
     print(results)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
