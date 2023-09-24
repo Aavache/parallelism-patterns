@@ -1,9 +1,13 @@
+"""Sharing data between processes using Value and lock."""
 import multiprocessing
 
 
 def increment_shared_counter(counter, lock):
+    """Increment a shared counter 100000 times."""
     for _ in range(100000):
         with lock:
+            # The lock ensures that only one process
+            # can access the counter at a time
             counter.value += 1
 
 

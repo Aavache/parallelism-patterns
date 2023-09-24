@@ -1,3 +1,6 @@
+"""This strategy can be used for those cases where there is a lot of data to process 
+and the processing of each data point is independent of the others.
+"""
 import multiprocessing
 
 

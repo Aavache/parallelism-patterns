@@ -1,3 +1,7 @@
+"""MapReduce is a programming model for processing large data sets with a parallel, 
+distributed algorithm on a cluster. The map function applies a function to each element
+in the data set and the reduce function combines the results into a single value.
+"""
 import multiprocessing
 
 
@@ -10,12 +14,12 @@ def map_function(data, result_queue):
     result_queue.put(results)
 
 
-def reduce_function(result_queues):
+def reduce_function(result_queues, output_queue):
     total = 0
     for result_queue in result_queues:
         results = result_queue.get()
         total += sum(results)
-    return total
+    output_queue.put(total)
 
 
 if __name__ == "__main__":
@@ -41,9 +45,10 @@ if __name__ == "__main__":
         p.join()
 
     # Start reduce process
-    reduce_process = multiprocessing.Process(target=reduce_function, args=(result_queues,))
+    output_queue = multiprocessing.Queue()
+    reduce_process = multiprocessing.Process(target=reduce_function, args=(result_queues, output_queue))
     reduce_process.start()
     reduce_process.join()
 
-    total_sum = reduce_process.exitcode
+    total_sum = output_queue.get()
     print("Total Sum of Squares:", total_sum)

@@ -1,3 +1,7 @@
+"""In this example, we will use a master-worker pattern to distribute tasks to multiple processes.
+The master process will create a task queue and a result queue. It will then create a number of worker processes and
+distribute tasks to them.
+"""
 import multiprocessing
 
 
@@ -6,11 +10,11 @@ def worker(task_queue, result_queue):
         task = task_queue.get()
         if task is None:
             break
-        result = task * 2  # Example task processing
+        result = task**2  # Example task processing
         result_queue.put(result)
 
 
-if __name__ == "__main__":
+def master():
     num_workers = 4
     task_queue = multiprocessing.Queue()
     result_queue = multiprocessing.Queue()
@@ -39,3 +43,7 @@ if __name__ == "__main__":
         results.append(result_queue.get())
 
     print(results)
+
+
+if __name__ == "__main__":
+    master()

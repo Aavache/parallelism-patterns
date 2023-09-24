@@ -1,41 +1,47 @@
+"""Example of a worker pool using multiprocessing.
+
+It is common convention to use two queues, one for input and one for output. This way, the worker processes can be
+independent of each other and the main process can collect the results when they are ready.
+"""
 import multiprocessing
 
 
-def worker(task_queue, result_queue):
+def worker(in_queue, out_queue):
+    """Independent worker process that processes tasks from a queue and puts results in another queue."""
     while True:
-        task = task_queue.get()
+        task = in_queue.get()
         if task is None:
             break
-        result = task * 2  # Example task processing
-        result_queue.put(result)
+        result = task**2  # Example task processing, square the number
+        out_queue.put(result)
 
 
 if __name__ == "__main__":
     num_workers = 4
-    task_queue = multiprocessing.Queue()
-    result_queue = multiprocessing.Queue()
+    in_queue = multiprocessing.Queue()
+    out_queue = multiprocessing.Queue()
 
-    # Start worker processes
-    workers = [multiprocessing.Process(target=worker, args=(task_queue, result_queue)) for _ in range(num_workers)]
+    # 1. Start worker processes
+    workers = [multiprocessing.Process(target=worker, args=(in_queue, out_queue)) for _ in range(num_workers)]
     for w in workers:
         w.start()
 
-    # Add tasks to the queue
+    # 2. Add tasks to the queue
     tasks = [1, 2, 3, 4, 5]
     for task in tasks:
-        task_queue.put(task)
+        in_queue.put(task)
 
-    # Add termination signal to the queue
+    # 3. Add termination signal to the input queue
     for _ in range(num_workers):
-        task_queue.put(None)
+        in_queue.put(None)
 
-    # Wait for workers to finish
+    # 4. Wait for workers to finish
     for w in workers:
         w.join()
 
-    # Collect results
+    # 5. Collect results
     results = []
-    while not result_queue.empty():
-        results.append(result_queue.get())
+    while not out_queue.empty():
+        results.append(out_queue.get())
 
     print(results)

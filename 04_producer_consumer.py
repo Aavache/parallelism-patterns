@@ -1,3 +1,7 @@
+"""In producer-consumer pattern, the producer process generates data and puts it into a shared queue.
+
+The consumer then takes data from the queue and processes it
+"""
 import multiprocessing
 import time
 
@@ -20,7 +24,7 @@ def consumer(queue):
 
 
 if __name__ == "__main__":
-    queue = multiprocessing.Queue()
+    queue = multiprocessing.Queue()  # Shared queue
     producer_process = multiprocessing.Process(target=producer, args=(queue,))
     consumer_process = multiprocessing.Process(target=consumer, args=(queue,))
 
